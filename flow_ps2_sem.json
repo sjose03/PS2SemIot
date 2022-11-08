@@ -1,0 +1,248 @@
+[
+    {
+        "id": "a8b62594c3ce93f5",
+        "type": "tab",
+        "label": "PS2SEM",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "fbbfdc7b8bc7564a",
+        "type": "inject",
+        "z": "a8b62594c3ce93f5",
+        "name": "com vagas",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{\"vaga1\":0,\"vaga2\":0}",
+        "payloadType": "json",
+        "x": 200,
+        "y": 180,
+        "wires": [
+            [
+                "3dca149247e2c985"
+            ]
+        ]
+    },
+    {
+        "id": "60f262bda50c8f7d",
+        "type": "inject",
+        "z": "a8b62594c3ce93f5",
+        "name": "sem vagas",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{\"vaga1\":1,\"vaga2\":1}",
+        "payloadType": "json",
+        "x": 200,
+        "y": 260,
+        "wires": [
+            [
+                "3dca149247e2c985"
+            ]
+        ]
+    },
+    {
+        "id": "b0215435eaa0d3ae",
+        "type": "inject",
+        "z": "a8b62594c3ce93f5",
+        "name": "so vaga 1",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{\"vaga1\":0,\"vaga2\":1}",
+        "payloadType": "json",
+        "x": 200,
+        "y": 340,
+        "wires": [
+            [
+                "3dca149247e2c985"
+            ]
+        ]
+    },
+    {
+        "id": "a8aec87a6d8e53b7",
+        "type": "inject",
+        "z": "a8b62594c3ce93f5",
+        "name": "so vaga 2",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{\"vaga1\":1,\"vaga2\":0}",
+        "payloadType": "json",
+        "x": 200,
+        "y": 420,
+        "wires": [
+            [
+                "3dca149247e2c985"
+            ]
+        ]
+    },
+    {
+        "id": "3dca149247e2c985",
+        "type": "function",
+        "z": "a8b62594c3ce93f5",
+        "name": "seleciona",
+        "func": "\nvar jsonP =  msg.payload;\nif (jsonP.vaga1 == 0 && jsonP.vaga2 == 0) {\n    msg.payload = \"AB\"\n}\nelse if (jsonP.vaga1 == 1 && jsonP.vaga2 == 1) {\n    msg.payload = \"X\"\n}\nelse if (jsonP.vaga1 == 1 && jsonP.vaga2 == 0) {\n    msg.payload = \"B\"\n}\nelse {\n    msg.payload = \"A\"\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 500,
+        "y": 300,
+        "wires": [
+            [
+                "c191e4fb965619c9"
+            ]
+        ]
+    },
+    {
+        "id": "c191e4fb965619c9",
+        "type": "mqtt out",
+        "z": "a8b62594c3ce93f5",
+        "name": "",
+        "topic": "/fiap/iot/ps/2sem/fluxo1",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "59163543.39a46c",
+        "x": 750,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "59bc8a2cbb9ce996",
+        "type": "mqtt in",
+        "z": "a8b62594c3ce93f5",
+        "name": "",
+        "topic": "/fiap/iot/ps/2sem/fluxo1",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "59163543.39a46c",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 200,
+        "y": 580,
+        "wires": [
+            [
+                "ee1bd3145be0f0fb"
+            ]
+        ]
+    },
+    {
+        "id": "ee1bd3145be0f0fb",
+        "type": "function",
+        "z": "a8b62594c3ce93f5",
+        "name": "seleciona",
+        "func": "\nvar pld =  msg.payload;\nif (pld == \"AB\") {\n    msg.payload = \"Ambas vagas disponiveis\"\n}\nelse if (pld == \"X\") {\n    msg.payload = \"Sem Vagas disponiveis\"\n}\nelse if (pld == \"B\") {\n    msg.payload = \"Somente a vaga B disponivel\"\n}\nelse {\n    msg.payload = \"Somente a vaga A disponivel\"\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 460,
+        "y": 640,
+        "wires": [
+            [
+                "c90afea11791aa8c"
+            ]
+        ]
+    },
+    {
+        "id": "c90afea11791aa8c",
+        "type": "ui_text",
+        "z": "a8b62594c3ce93f5",
+        "group": "85f748d8b2f0bf65",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Status Vagas",
+        "format": "{{msg.payload}}",
+        "layout": "col-center",
+        "className": "",
+        "x": 730,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "59163543.39a46c",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "broker.hivemq.com",
+        "port": "1883",
+        "clientid": "",
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "sessionExpiry": ""
+    },
+    {
+        "id": "85f748d8b2f0bf65",
+        "type": "ui_group",
+        "name": "Default",
+        "tab": "825b3c3029c76916",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "825b3c3029c76916",
+        "type": "ui_tab",
+        "name": "minhaUI",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    }
+]
